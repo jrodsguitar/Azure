@@ -18,22 +18,22 @@ if($azcred -eq $null){
 
 # Replace the following URL with a public GitHub repo URL
 $json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployDB.json"
-$dbname ="JoseResource$(Get-Random)"
 
-$dbname = "JoseDB"
+
+$dbname ="josedb$(Get-Random)"
 $sqlserverAdminLogin = "sqladmin"
 
 $password = Read-Host -assecurestring "Set DB password. Enter a password."
 $sqlserverAdminPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
-$sqlservername = "joseDBServ"
+$sqlservername = "josedbserv$(Get-Random)"
 
 
         $params =  @{
-        'TemplateURI' = $json
-        "databaseName" = $dbname
-        "sqlserverAdminLogin" = $sqlserverAdminLogin
-        "sqlserverAdminPassword" = $sqlserverAdminPassword
-        "sqlserverName" = $sqlserverName
+        'TemplateURI' = "$json";
+        "databaseName" = "$dbname";
+        "sqlserverAdminLogin" = "$sqlserverAdminLogin";
+        "sqlserverAdminPassword" = "$sqlserverAdminPassword";
+        "sqlserverName" = "$sqlserverName";
     
         }
         
@@ -52,7 +52,7 @@ $sqlservername = "joseDBServ"
 #test-AzureRmResourceGroupDeployment @params -ResourceGroupName $resourcegroup -ApiVersion 2014-04-01
 
 
-New-AzureRmResourceGroupDeployment @params -ResourceGroupName $resourcegroup -ApiVersion 2015-01-01 -Force
+New-AzureRmResourceGroupDeployment  @params -ResourceGroupName $resourcegroup -ApiVersion 2014-01-01 -Force
 
 
 #$getwebappinfo = Get-AzureRmResource -ResourceGroupName $resourcegroup -ResourceName $resourcename

@@ -49,10 +49,10 @@
     }
   },
   "variables": {
-    "databaseName": "[concat('mydb', parameters('databaseName'))]",
+    "databaseName": "[parameters('databaseName')]",
     "sqlserverAdminLogin": "[parameters('sqlserverAdminLogin')]",
     "sqlserverAdminPassword": "[parameters('sqlserverAdminPassword')]",
-    "sqlserverName": "[concat('mysqlserver', parameters('sqlserverName'))]"
+    "sqlserverName": "[parameters('sqlserverName')]"
   },
   "resources": [
     {
