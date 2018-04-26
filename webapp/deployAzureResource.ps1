@@ -17,9 +17,10 @@ if($azcred -eq $null){
 
 
 # Replace the following URL with a public GitHub repo URL
-$json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployDB2.json"
+$json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployDB.json"
 $resourcename="JoseResource$(Get-Random)"
 $location="West US"
+$servername = "joseDBServ"
 
     
   
@@ -27,6 +28,7 @@ $location="West US"
         'TemplateURI' = $json
         'DatabaseName' = $resourcename
         'Location' = $location
+        'ServerName' = $servername
     
         }
         

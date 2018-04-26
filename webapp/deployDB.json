@@ -1,56 +1,105 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "collation": {
-            "type": "string",
-            "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
-        },
-        "databaseName": {
-            "type": "string"
-        },
-        "edition": {
-            "type": "string",
-            "defaultValue": "Basic"
-        },
-        "location": {
-            "type": "string"
-        },
-        "maxSizeBytes": {
-            "type": "string",
-            "defaultValue": "13107200"
-        },
-        "requestedServiceObjectiveId": {
-            "type": "string",
-            "defaultValue": "455330e1-00cd-488b-b5fa-177c226f28b7"
-        },
-        "serverName": {
-            "type": "string"
-        },
-        "zoneRedundant": {
-            "defaultValue": false,
-            "type": "bool"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "databaseCollation": {
+      "type": "string",
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
     },
-    "variables": {
-        "DatabaseName": "[parameters('databaseName')]",
-        "ServerName": "[parameters('serverName')]",
-        "Location":"[parameters('Location')]"
-
-	},
-    "resources": [
+    "databaseEdition": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "allowedValues": [
+        "Basic",
+        "Standard",
+        "Premium"
+      ]
+    },
+    "databaseMaxSizeBytes": {
+      "type": "string",
+      "defaultValue": "1073741824"
+    },
+    "databaseRequestedServiceObjectiveName": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "allowedValues": [
+        "Basic",
+        "S0",
+        "S1",
+        "S2",
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "metadata": {
+        "description": "Describes the performance level for Edition"
+      }
+    },
+    "databaseName": {
+      "type": "string"    
+    },
+    "sqlserverAdminLogin": {
+      "type": "string"     
+    },
+    "sqlserverAdminPassword": {
+      "type": "string"    
+    },
+    "sqlserverName": {
+      "type": "string"    
+    }
+  },
+  "variables": {
+    "databaseName": "[concat('mydb', parameters('databaseName'))]",
+    "sqlserverAdminLogin": "[parameters('sqlserverAdminLogin')]",
+    "sqlserverAdminPassword": "[parameters('sqlserverAdminPassword')]",
+    "sqlserverName": "[concat('mysqlserver', parameters('sqlserverName'))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2014-04-01-preview",
+      "name": "[variables('sqlserverName')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "administratorLogin": "[variables('sqlserverAdminLogin')]",
+        "administratorLoginPassword": "[variables('sqlserverAdminPassword')]"
+      },
+      "tags": {
+        "displayName": "SqlServer"
+      },
+      "resources": [
         {
-            "type": "Microsoft.Sql/servers/databases",
-            "name": "[concat(variables('serverName'), '/', variables('DataBaseName'))]",
-            "apiVersion": "2014-04-01",
-            "location": "[variables('location')]",
-            "properties": {
-                "collation": "[parameters('collation')]",
-                "edition": "[parameters('edition')]",
-                "maxSizeBytes": "[parameters('maxSizeBytes')]",
-                "requestedServiceObjectiveId": "[parameters('requestedServiceObjectiveId')]",
-                "zoneRedundant": "[parameters('zoneRedundant')]"
-            }
+          "apiVersion": "2014-04-01-preview",
+          "name": "[variables('databaseName')]",
+          "type": "databases",
+          "location": "[resourceGroup().location]",
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', variables('sqlserverName'))]"
+          ],
+          "properties": {
+            "edition": "[parameters('databaseEdition')]",
+            "collation": "[parameters('databaseCollation')]",
+            "maxSizeBytes": "[parameters('databaseMaxSizeBytes')]",
+            "requestedServiceObjectiveName": "[parameters('databaseRequestedServiceObjectiveName')]"
+          },
+          "tags": {
+            "displayName": "Database"
+          }
+        },
+        {
+          "apiVersion": "2014-04-01-preview",
+          "name": "AllowAllWindowsAzureIps",
+          "type": "firewallrules",
+          "location": "[resourceGroup().location]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlserverName'))]"
+          ],
+          "properties": {
+            "startIpAddress": "0.0.0.0",
+            "endIpAddress": "0.0.0.0"
+          }
         }
-    ]
+      ]
+    }
+  ]
 }
