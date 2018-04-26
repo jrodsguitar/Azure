@@ -30,7 +30,6 @@ $sqlservername = "joseDBServ"
 
         $params =  @{
         'TemplateURI' = $json
-        'ServerName' = $servername
         "databaseName" = $dbname
         "sqlserverAdminLogin" = $sqlserverAdminLogin
         "sqlserverAdminPassword" = $sqlserverAdminPassword
