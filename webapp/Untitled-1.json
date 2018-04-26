@@ -1,0 +1,24 @@
+{
+  "name": "string",
+  "type": "Microsoft.Sql/servers/databases",
+  "apiVersion": "2014-04-01",
+  "tags": {},
+  "location": "string",
+  "properties": {
+    "collation": "string",
+    "createMode": "string",
+    "sourceDatabaseId": "string",
+    "sourceDatabaseDeletionDate": "string",
+    "restorePointInTime": "string",
+    "recoveryServicesRecoveryPointResourceId": "string",
+    "edition": "string",
+    "maxSizeBytes": "string",
+    "requestedServiceObjectiveId": "string",
+    "requestedServiceObjectiveName": "string",
+    "elasticPoolName": "string",
+    "readScale": "string",
+    "sampleName": "AdventureWorksLT",
+    "zoneRedundant": boolean
+  },
+  "resources": []
+}
