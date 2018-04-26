@@ -25,6 +25,8 @@ $location="West US"
   
         $params =  @{
         'TemplateURI' = $json
+        'DatabaseName' = $resourcename
+        'Location' = $location
     
         }
         
@@ -43,7 +45,7 @@ $location="West US"
 #test-AzureRmResourceGroupDeployment @params -ResourceGroupName $resourcegroup -ApiVersion 2014-04-01
 
 
-New-AzureRmResourceGroupDeployment @params -ResourceGroupName $resourcegroup -Name $resourcename -ApiVersion 2014-04-01 -Force
+New-AzureRmResourceGroupDeployment @params -ResourceGroupName $resourcegroup -ApiVersion 2014-04-01 -Force
 
 
 #$getwebappinfo = Get-AzureRmResource -ResourceGroupName $resourcegroup -ResourceName $resourcename
