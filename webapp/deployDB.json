@@ -32,12 +32,18 @@
             "type": "bool"
         }
     },
+    "variables": {
+        "DatabaseName": "[parameters('databaseName')]",
+        "ServerName": "[parameters('serverName')]",
+        "Location":"[parameters('Location')]"
+
+	},
     "resources": [
         {
             "type": "Microsoft.Sql/servers/databases",
-            "name": "[concat(parameters('serverName'), '/', parameters('databaseName'))]",
+            "name": "[concat(variables('serverName'), '/', variables('DataBaseName'))]",
             "apiVersion": "2014-04-01",
-            "location": "[parameters('location')]",
+            "location": "[variables('location')]",
             "properties": {
                 "collation": "[parameters('collation')]",
                 "edition": "[parameters('edition')]",

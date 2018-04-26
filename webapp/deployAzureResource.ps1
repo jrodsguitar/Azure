@@ -17,7 +17,7 @@ if($azcred -eq $null){
 
 
 # Replace the following URL with a public GitHub repo URL
-$json="https://github.com/jrodsguitar/Azure/blob/master/webapp/deployDB.json"
+$json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployDB2.json"
 $resourcename="JoseResource$(Get-Random)"
 $location="West US"
 
@@ -40,6 +40,7 @@ $location="West US"
 #Remove-AzureRmResource -ResourceGroupName SANDBOX_SRV_SERVERS -ResourceType Microsoft.Network/networkInterfaces -ResourceName "SB-JoseVMNic" -ApiVersion 2017-03-01 -Force
     
 
+#test-AzureRmResourceGroupDeployment @params -ResourceGroupName $resourcegroup -ApiVersion 2014-04-01
 
 
 New-AzureRmResourceGroupDeployment @params -ResourceGroupName $resourcegroup -Name $resourcename -ApiVersion 2014-04-01 -Force
