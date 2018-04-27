@@ -18,7 +18,8 @@ $json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployD
 
 $webappname = "josewebapp$(Get-Random)"
 $appplanname = "appplanname$(Get-Random)"
-
+$repourl = "https://github.com/Azure-Samples/app-service-web-dotnet-get-started.git"
+$branch = "master"
 $pidguid = new-guid
 
 
