@@ -13,15 +13,14 @@ if($azcred -eq $null){
     }
     
 # Replace the following URL with a public GitHub repo URL
-$json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployDB.json"
+$json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebApp.json"
 
 
 $webappname = "josewebapp$(Get-Random)"
 $appplanname = "appplanname$(Get-Random)"
-$repourl = "https://github.com/Azure-Samples/app-service-web-dotnet-get-started.git"
+$repourl = "https://github.com/jrodsguitar/jrodsguitar-app-service-web-dotnet-get-started-master.git"
 $branch = "master"
 $pidguid = new-guid
-
 
 
         $params =  @{
