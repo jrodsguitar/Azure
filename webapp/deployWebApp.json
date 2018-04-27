@@ -22,21 +22,13 @@
             "metadata": {
                 "description": "The branch of the GitHub repository to use."
             }
-        },
-        "pidguid": {
-            "type": "string",
-            "defaultValue": "master",
-            "metadata": {
-                "description": "The branch of the GitHub repository to use."
-            }
         }
     },
     "variables": {      
         "appplanname": "[parameters('appplanname')]",
         "webappname": "[parameters('webappname')]",
         "repoURL": "[parameters('repoURL')]",
-        "branch": "[parameters('branch')]",
-        "pidguid": "[parameters('pidguid')]"
+        "branch": "[parameters('branch')]"
     },
     "resources": [
         {
@@ -72,7 +64,6 @@
             "apiVersion": "2016-08-01",
             "location": "[resourceGroup().location]",
             "identity": {
-                "tenantId": "[subscription().tenantId]",
                 "type": "SystemAssigned"
             },
             "scale": null,
