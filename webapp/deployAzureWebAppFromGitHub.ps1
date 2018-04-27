@@ -20,7 +20,6 @@ $webappname = "josewebapp$(Get-Random)"
 $appplanname = "appplanname$(Get-Random)"
 $repourl = "https://github.com/jrodsguitar/jrodsguitar-app-service-web-dotnet-get-started-master.git"
 $branch = "master"
-$pidguid = new-guid
 
 
         $params =  @{
@@ -29,7 +28,6 @@ $pidguid = new-guid
         "appplanname" = "$appplanname";
         "repoURL" = "$repoURL";
         "branch" = "$branch";
-        "pidguid" = "$pidguid";
     
         }
 

@@ -72,7 +72,6 @@
             "apiVersion": "2016-08-01",
             "location": "[resourceGroup().location]",
             "identity": {
-                "principalId": "[variables('pidguid')]",
                 "tenantId": "[subscription().tenantId]",
                 "type": "SystemAssigned"
             },
