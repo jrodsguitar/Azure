@@ -1,19 +1,29 @@
-$secure = Import-Csv C:\me\github\secure\secure.csv
+param(
+$azacountid,
+$azaccesstoken,
+$azTenId,
+$pass,
+$resourcegroup,
+$aduser
 
-if($azcred -eq $null){
+)
+
+#$secure = Import-Csv C:\me\github\secure\secure.csv
+
+<# if($azcred -eq $null){
     $azcred = Get-Credential
     }
 
-    $azTenId    = $secure.azTenId
     $subscrname   = $secure.subscrname
     $resourcegroup = $secure.resourcegroup
     
     if($azacct -eq $null){
     $azacct = Login-AzureRmAccount -Subscription $subscrname
     }
-
+ #>
     if($azad -eq $null){
-    $azad = Connect-AzureAD
+    $azad = Connect-AzureAD -AccountId $azaccountid -AadAccessToken $azaccesstoken -TenantId $azTenId
+
     }
 
 # Replace the following URL with a public GitHub repo URL
@@ -28,12 +38,12 @@ $branch = "master"
 $dbname ="josedb$(Get-Random)"
 $sqlserverAdminLogin = "sqladmin"
 
-$password = Read-Host -assecurestring "Set DB password. Enter a password."
-$sqlserverAdminPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
+#$password = Read-Host -assecurestring "Set DB password. Enter a password."
+#$sqlserverAdminPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
 $sqlservername = "josedbserv$(Get-Random)"
 
 
-$AADAdminLogin = Get-AzureADUser -SearchString $secure.aaduser
+$AADAdminLogin = Get-AzureADUser -SearchString $aduser
 $AADAdminObjectID = $AADAdminLogin.objectid
 
 
@@ -45,7 +55,7 @@ $AADAdminObjectID = $AADAdminLogin.objectid
         "branch" = "$branch";
         "databaseName" = "$dbname";
         "sqlserverAdminLogin" = "$sqlserverAdminLogin";
-        "sqlserverAdminPassword" = "$sqlserverAdminPassword";
+        "sqlserverAdminPassword" = "$pass";
         "sqlserverName" = "$sqlserverName";
         "AADAdminLogin" = "$($AADAdminLogin.userprincipalname)"
         "AADAdminObjectID" =  "$AADAdminObjectID"
