@@ -11,7 +11,11 @@ if($azcred -eq $null){
     if($azacct -eq $null){
     $azacct = Login-AzureRmAccount -Subscription $subscrname
     }
-    
+
+    if($azad -eq $null){
+    $azad = Connect-AzureAD
+    }
+
 # Replace the following URL with a public GitHub repo URL
 $json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebAppAAD.json"
 
@@ -29,6 +33,10 @@ $sqlserverAdminPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringA
 $sqlservername = "josedbserv$(Get-Random)"
 
 
+$AADAdminLogin = Get-AzureADUser -SearchString $secure.aaduser
+$AADAdminObjectID = $AADAdminLogin.objectid
+
+
         $params =  @{
         'TemplateURI' = "$json";
         "webappname" = "$webappname";
@@ -39,6 +47,8 @@ $sqlservername = "josedbserv$(Get-Random)"
         "sqlserverAdminLogin" = "$sqlserverAdminLogin";
         "sqlserverAdminPassword" = "$sqlserverAdminPassword";
         "sqlserverName" = "$sqlserverName";
+        "AADAdminLogin" = "$AADAdminLogin"
+        "AADAdminObjectID" =  "$AADAdminObjectID"
     
         }
 

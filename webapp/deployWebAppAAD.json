@@ -71,6 +71,12 @@
         },
         "sqlserverName": {
             "type": "string"    
+        },
+        "AADAdminLogin": {
+            "type": "String"
+        },
+        "AADAdminObjectID": {
+            "type": "String"
         }
     },
     "variables": {      
@@ -81,10 +87,12 @@
         "databaseName": "[parameters('databaseName')]",
         "sqlserverAdminLogin": "[parameters('sqlserverAdminLogin')]",
         "sqlserverAdminPassword": "[parameters('sqlserverAdminPassword')]",
-        "sqlserverName": "[parameters('sqlserverName')]"
+        "sqlserverName": "[parameters('sqlserverName')]",
+        "AADAdminLogin": "[parameters('AADAdminLogin')]",
+        "AADAdminObjectID": "[parameters('AADAdminObjectID')]"
     },
     "resources": [
-    {
+    {                
         "apiVersion": "2014-04-01-preview",
         "name": "[variables('sqlserverName')]",
         "type": "Microsoft.Sql/servers",
@@ -95,9 +103,24 @@
         },
         "tags": {
           "displayName": "SqlServer"
-        },
+        },       
         "resources": [
           {
+            "type": "administrators",
+            "name": "activeDirectory",
+            "apiVersion": "2014-04-01-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "administratorType": "ActiveDirectory",
+                "login": "[variables('AADAdminLogin')]",
+                "sid": "[variables('AADAdminObjectID')]",
+                "tenantId": "[subscription().subscriptionId]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Sql/servers/', variables('sqlserverName'))]"
+            ]
+        },
+        {
             "apiVersion": "2014-04-01-preview",
             "name": "[variables('databaseName')]",
             "type": "databases",
@@ -188,7 +211,6 @@
                 "enabled": true,
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appplanname'))]",
                 "reserved": false,
-                "siteConfig": null,
                 "scmSiteAlsoStopped": false,
                 "hostingEnvironmentProfile": null,
                 "clientAffinityEnabled": true,
@@ -196,7 +218,16 @@
                 "hostNamesDisabled": false,
                 "containerSize": 0,
                 "dailyMemoryTimeQuota": 0,
-                "cloningInfo": null
+                "cloningInfo": null,
+                "siteConfig": {
+                "appSettings": [
+                    {
+                        "name": "ASPNETCORE_ENVIRONMENT",
+                        "value": "Production" 
+                    }
+                    ]
+                },
+                "clientUrl": "[concat('http://', reference(resourceId('Microsoft.Web/Sites', parameters('webappname'))).hostNames[0])]"
             },
             "resources": [
             {
@@ -210,23 +241,6 @@
                 "RepoUrl": "[variables('repoURL')]",
                 "branch": "[variables('branch')]",
                 "IsManualIntegration": true
-                }
-            },
-            {
-                "apiVersion": "2015-04-01",
-                "name": "appsettings",
-                "type": "config",
-                "dependsOn": [],
-                "properties": {
-                    "clientUrl": "[concat('http://', reference(resourceId('Microsoft.Web/Sites', parameters('webappname'))).hostNames[0])]",
-                    "siteConfig": {
-                        "appSettings": [
-                            {
-                                "name": "ASPNETCORE_ENVIRONMENT", 
-                                "value": "Production" 
-                            }
-                        ]
-                    }
                 }
             },
             {
