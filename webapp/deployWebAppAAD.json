@@ -22,17 +22,131 @@
             "metadata": {
                 "description": "The branch of the GitHub repository to use."
             }
+        },
+        "databaseCollation": {
+            "type": "string",
+            "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        "databaseEdition": {
+            "type": "string",
+            "defaultValue": "Basic",
+            "allowedValues": [
+                "Basic",
+                "Standard",
+                "Premium"
+            ]
+        },
+        "databaseMaxSizeBytes": {
+            "type": "string",
+            "defaultValue": "1073741824"
+        },
+        "databaseRequestedServiceObjectiveName": {
+            "type": "string",
+            "defaultValue": "Basic",
+            "allowedValues": [
+                "Basic",
+                "S0",
+                "S1",
+                "S2",
+                "P1",
+                "P2",
+                "P3"
+            ],
+            "metadata": {
+                "description": "Describes the performance level for Edition"
+            }
+        },
+        "FireWallRulesName": {
+        "type": "string",
+        "defaultValue": "FireWallRules" 
+        },
+        "databaseName": {
+            "type": "string"    
+        },
+        "sqlserverAdminLogin": {
+            "type": "string"     
+        },
+        "sqlserverAdminPassword": {
+            "type": "string"    
+        },
+        "sqlserverName": {
+            "type": "string"    
         }
     },
     "variables": {      
         "appplanname": "[parameters('appplanname')]",
         "webappname": "[parameters('webappname')]",
         "repoURL": "[parameters('repoURL')]",
-        "branch": "[parameters('branch')]"
+        "branch": "[parameters('branch')]",
+        "databaseName": "[parameters('databaseName')]",
+        "sqlserverAdminLogin": "[parameters('sqlserverAdminLogin')]",
+        "sqlserverAdminPassword": "[parameters('sqlserverAdminPassword')]",
+        "sqlserverName": "[parameters('sqlserverName')]"
     },
     "resources": [
-        {
-           "type": "Microsoft.Web/serverfarms",
+    {
+        "apiVersion": "2014-04-01-preview",
+        "name": "[variables('sqlserverName')]",
+        "type": "Microsoft.Sql/servers",
+        "location": "[resourceGroup().location]",
+        "properties": {
+          "administratorLogin": "[variables('sqlserverAdminLogin')]",
+          "administratorLoginPassword": "[variables('sqlserverAdminPassword')]"
+        },
+        "tags": {
+          "displayName": "SqlServer"
+        },
+        "resources": [
+          {
+            "apiVersion": "2014-04-01-preview",
+            "name": "[variables('databaseName')]",
+            "type": "databases",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+              "[concat('Microsoft.Sql/servers/', variables('sqlserverName'))]"
+            ],
+            "properties": {
+              "edition": "[parameters('databaseEdition')]",
+              "collation": "[parameters('databaseCollation')]",
+              "maxSizeBytes": "[parameters('databaseMaxSizeBytes')]",
+              "requestedServiceObjectiveName": "[parameters('databaseRequestedServiceObjectiveName')]"
+            },
+            "tags": {
+              "displayName": "Database"
+            }
+          },
+          {
+            "apiVersion": "2014-04-01-preview",
+            "name": "AllowAllWindowsAzureIps",
+            "type": "firewallrules",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+              "[resourceId('Microsoft.Sql/servers', variables('sqlserverName'))]"
+            ],
+            "properties": {
+              "startIpAddress": "0.0.0.0",
+              "endIpAddress": "0.0.0.0"
+            }
+          },
+          {
+          "type": "Microsoft.Sql/servers/firewallRules",
+              "kind": "v12.0",
+              "name": "[concat(variables('sqlserverName'), '/', parameters('FireWallRulesName'))]",
+              "apiVersion": "2014-04-01-preview",
+              "location": "[resourceGroup().location]",
+              "scale": null,
+              "properties": {
+                  "startIpAddress": "0.0.0.0",
+                  "endIpAddress": "255.255.255.255"
+              },
+              "dependsOn": [
+                  "[resourceId('Microsoft.Sql/servers', variables('sqlserverName'))]"
+              ]
+          }
+        ]
+      },  
+       { 
+        "type": "Microsoft.Web/serverfarms",
             "sku": {
                 "name": "S1",
                 "tier": "Standard",
@@ -66,6 +180,9 @@
             "identity": {
                 "type": "SystemAssigned"
             },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('appplanname'))]"
+            ],
             "scale": null,
             "properties": {
                 "enabled": true,
@@ -82,25 +199,60 @@
                 "cloningInfo": null
             },
             "resources": [
-        {
-          "apiVersion": "2015-08-01",
-          "name": "web",
-          "type": "sourcecontrols",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', parameters('webappname'))]"
-          ],
-          "properties": {
-            "RepoUrl": "[variables('repoURL')]",
-            "branch": "[variables('branch')]",
-            "IsManualIntegration": true
-            }
-        }
-        ],
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', variables('appplanname'))]"
+            {
+            "apiVersion": "2015-08-01",
+                "name": "web",
+                "type": "sourcecontrols",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Web/Sites', parameters('webappname'))]"
+            ],
+            "properties": {
+                "RepoUrl": "[variables('repoURL')]",
+                "branch": "[variables('branch')]",
+                "IsManualIntegration": true
+                }
+            },
+            {
+                "apiVersion": "2015-04-01",
+                "name": "appsettings",
+                "type": "config",
+                "dependsOn": [],
+                "properties": {
+                    "clientUrl": "[concat('http://', reference(resourceId('Microsoft.Web/Sites', parameters('webappname'))).hostNames[0])]",
+                    "siteConfig": {
+                        "appSettings": [
+                            {
+                                "name": "ASPNETCORE_ENVIRONMENT", 
+                                "value": "Production" 
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "apiVersion": "2015-04-01",
+                "name": "connectionstrings",
+                "type": "config",
+                "dependsOn": [],
+                "properties": {
+                    "MultiChannelToDoContext": {
+                        "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('databasename'), ';User Id=', variables('sqlServerAdminLogin'), '@', variables('sqlServerName'), ';Password=', variables('sqlServerAdminPassword'), ';')]",
+                        "type": "SQLAzure"
+                        }
+                    }
+                
+                }
             ]
+                        
         }
+    
 
     ]
 
 }
+
+
+
+
+
+

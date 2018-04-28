@@ -13,12 +13,12 @@ if($azcred -eq $null){
     }
     
 # Replace the following URL with a public GitHub repo URL
-$json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebApp.json"
+$json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebAppAAD.json"
 
 
 $webappname = "josewebapp$(Get-Random)"
 $appplanname = "joseappplanname$(Get-Random)"
-$repourl = "https://github.com/jrodsguitar/jrodsguitar-app-service-web-dotnet-get-started-master.git"
+$repourl = "https://github.com/jrodsguitar/dotnetcore-sqldb-tutorial-aadauth.git"
 $branch = "master"
 
 
@@ -28,6 +28,10 @@ $branch = "master"
         "appplanname" = "$appplanname";
         "repoURL" = "$repoURL";
         "branch" = "$branch";
+        "databaseName" = "$dbname";
+        "sqlserverAdminLogin" = "$sqlserverAdminLogin";
+        "sqlserverAdminPassword" = "$sqlserverAdminPassword";
+        "sqlserverName" = "$sqlserverName";
     
         }
 
