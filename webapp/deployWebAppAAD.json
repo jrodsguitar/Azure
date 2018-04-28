@@ -110,15 +110,15 @@
             "name": "activeDirectory",
             "apiVersion": "2014-04-01-preview",
             "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Sql/servers/', variables('sqlserverName'))]"
+            ],
             "properties": {
                 "administratorType": "ActiveDirectory",
                 "login": "[variables('AADAdminLogin')]",
                 "sid": "[variables('AADAdminObjectID')]",
                 "tenantId": "[subscription().subscriptionId]"
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Sql/servers/', variables('sqlserverName'))]"
-            ]
+            }          
         },
         {
             "apiVersion": "2014-04-01-preview",
@@ -182,6 +182,7 @@
             "apiVersion": "2016-09-01",
             "location": "[resourceGroup().location]",
             "scale": null,
+            "dependsOn": ["[variables('databaseName')]"],
             "properties": {
                 "name": "[variables('appplanname')]",
                 "workerTierName": null,
@@ -191,8 +192,7 @@
                 "reserved": false,
                 "targetWorkerCount": 0,
                 "targetWorkerSizeId": 0
-            },
-            "dependsOn": ["[variables('databaseName')]"]
+            }           
         },
         {
             "type": "Microsoft.Web/sites",
@@ -204,7 +204,8 @@
                 "type": "SystemAssigned"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', variables('appplanname'))]"
+                "[resourceId('Microsoft.Web/serverfarms', variables('appplanname'))]",
+                "[variables('databaseName')]"
             ],
             "scale": null,
             "properties": {
@@ -229,12 +230,13 @@
                 }
             },
             "resources": [
-            {
+            {          
             "apiVersion": "2015-08-01",
-                "name": "web",
-                "type": "sourcecontrols",
-                "dependsOn": [
-                    "[variables('webappname')]"
+            "name": "web",
+            "type": "sourcecontrols",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/Sites', parameters('webappname'))]",
+                "[variables('databaseName')]"
             ],
             "properties": {
                 "RepoUrl": "[variables('repoURL')]",
@@ -246,7 +248,10 @@
                 "apiVersion": "2015-04-01",
                 "name": "connectionstrings",
                 "type": "config",
-                "dependsOn": ["[resourceId('Microsoft.Web/Sites', variables('webappname'))]"], 
+                "dependsOn": [
+                    "[resourceId('Microsoft.Web/Sites', variables('webappname'))]",
+                    "[variables('databaseName')]"
+                ], 
                 "properties": {
                     "MultiChannelToDoContext": {
                         "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('databasename'), ';User Id=', variables('sqlServerAdminLogin'), '@', variables('sqlServerName'), ';Password=', variables('sqlServerAdminPassword'), ';')]",
@@ -263,9 +268,3 @@
     ]
 
 }
-
-
-
-
-
-
