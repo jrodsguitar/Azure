@@ -234,7 +234,7 @@
                 "name": "web",
                 "type": "sourcecontrols",
                 "dependsOn": [
-                    "[resourceId('Microsoft.Web/serverfarms', variables('appplanname'))]"
+                    "[variables('webappname')]"
             ],
             "properties": {
                 "RepoUrl": "[variables('repoURL')]",
