@@ -67,7 +67,7 @@ $AADAdminObjectID = $AADAdminLogin.objectid
 
 #test-AzureRmResourceGroupDeployment @params -ResourceGroupName $resourcegroup -ApiVersion 2014-04-01
 
-New-AzureRmResourceGroupDeployment  @params -ResourceGroupName $resourcegroup -ApiVersion 2014-01-01 -Force  
+New-AzureRmResourceGroupDeployment @params -ResourceGroupName $resourcegroup -ApiVersion 2014-01-01 -Force  
 
 #$getwebappinfo = Get-AzureRmResource -ResourceGroupName $resourcegroup
 
