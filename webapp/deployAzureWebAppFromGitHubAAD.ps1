@@ -21,6 +21,13 @@ $appplanname = "joseappplanname$(Get-Random)"
 $repourl = "https://github.com/jrodsguitar/dotnetcore-sqldb-tutorial-aadauth.git"
 $branch = "master"
 
+$dbname ="josedb$(Get-Random)"
+$sqlserverAdminLogin = "sqladmin"
+
+$password = Read-Host -assecurestring "Set DB password. Enter a password."
+$sqlserverAdminPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
+$sqlservername = "josedbserv$(Get-Random)"
+
 
         $params =  @{
         'TemplateURI' = "$json";
