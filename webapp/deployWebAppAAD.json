@@ -233,7 +233,7 @@
                 "apiVersion": "2015-04-01",
                 "name": "connectionstrings",
                 "type": "config",
-                "dependsOn": [],
+                "dependsOn": "[resourceId('Microsoft.Web/serverfarms', variables('appplanname'))]",
                 "properties": {
                     "MultiChannelToDoContext": {
                         "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('databasename'), ';User Id=', variables('sqlServerAdminLogin'), '@', variables('sqlServerName'), ';Password=', variables('sqlServerAdminPassword'), ';')]",
