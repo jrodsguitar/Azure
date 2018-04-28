@@ -226,8 +226,7 @@
                         "value": "Production" 
                     }
                     ]
-                },
-                "clientUrl": "[concat('http://', reference(resourceId('Microsoft.Web/Sites', parameters('webappname'))).hostNames[0])]"
+                }
             },
             "resources": [
             {
