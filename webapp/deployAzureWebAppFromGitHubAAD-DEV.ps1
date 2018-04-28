@@ -16,6 +16,34 @@ if($azcred -eq $null){
     $azad = Connect-AzureAD
     }
 
+
+
+
+
+    
+Function runSQLQuery()
+{
+    param
+    ($queryInput, 
+    $connectionString)
+
+$connection = New-Object -TypeName System.Data.SqlClient.SqlConnection($connectionString)
+$query = $QueryInput
+$command = New-Object -TypeName System.Data.SqlClient.SqlCommand($query, $connection)
+$connection.Open()
+$command.ExecuteNonQuery()
+$result = $command.ExecuteReader()
+$table = new-object “System.Data.DataTable”
+$table.clear()
+$table.Load($result)
+return $table
+$connection.Close()
+
+}
+
+
+
+$user = "$($azcred.GetNetworkCredential().UserName)@answerfinancial.com"
 # Replace the following URL with a public GitHub repo URL
 $json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebAppAAD.json"
 
@@ -31,6 +59,8 @@ $sqlserverAdminLogin = "sqladmin"
 $password = Read-Host -assecurestring "Set DB password. Enter a password."
 $sqlserverAdminPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
 $sqlservername = "josedbserv$(Get-Random)"
+
+
 
 
 $AADAdminLogin = Get-AzureADUser -SearchString $secure.aaduser
@@ -57,7 +87,19 @@ $AADAdminObjectID = $AADAdminLogin.objectid
 
 #test-AzureRmResourceGroupDeployment @params -ResourceGroupName $resourcegroup -ApiVersion 2014-04-01
 
-New-AzureRmResourceGroupDeployment  @params -ResourceGroupName $resourcegroup -ApiVersion 2014-01-01 -Force  
+New-AzureRmResourceGroupDeployment  @params -ResourceGroupName $resourcegroup -ApiVersion 2014-01-01 -Force
+
+$getdb = Get-AzureRmSqlDatabase -ResourceGroupName $resourcegroup -ServerName $sqlservername -DatabaseName $dbname
+
+$connectionstring = "Server=tcp:$($getdb.servername).database.windows.net,1433;Initial Catalog=$($getdb.databasename);Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Authentication='Active Directory Integrated';"
+
+$query = ("
+
+select * from master
+
+"
+)
+runSQLQuery -queryInput $queryinput -connectionString $connectionstring
 
 #$getwebappinfo = Get-AzureRmResource -ResourceGroupName $resourcegroup
 
