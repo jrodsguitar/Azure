@@ -192,7 +192,7 @@
                 "targetWorkerCount": 0,
                 "targetWorkerSizeId": 0
             },
-            "dependsOn": []
+            "dependsOn": ["[variables('databaseName')]"]
         },
         {
             "type": "Microsoft.Web/sites",
