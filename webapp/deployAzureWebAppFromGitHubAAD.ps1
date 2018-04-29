@@ -1,7 +1,4 @@
 param(
-$azaccountid,
-$azaccesstoken,
-$azTenId,
 $pass,
 $resourcegroup,
 $aduser
@@ -25,10 +22,10 @@ install-module -name AzureAD -force -verbose -Scope CurrentUser
     $azacct = Login-AzureRmAccount -Subscription $subscrname
     }
  #>
-    if($azad -eq $null){
-    $azad = Connect-AzureAD -AccountId $azaccountid -AadAccessToken $azaccesstoken -TenantId $azTenId
+   # if($azad -eq $null){
+    #$azad = Connect-AzureAD -AccountId $azaccountid -AadAccessToken $azaccesstoken -TenantId $azTenId
 
-    }
+    #}
 
 # Replace the following URL with a public GitHub repo URL
 $json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebAppAAD.json"
