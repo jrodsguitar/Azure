@@ -8,6 +8,10 @@ $aduser
 
 )
 
+Install-packageprovider -name nuget -force -scope CurrentUser
+
+install-module -name AzureAD -force -verbose -Scope CurrentUser
+
 #$secure = Import-Csv C:\me\github\secure\secure.csv
 
 <# if($azcred -eq $null){
@@ -61,7 +65,7 @@ $AADAdminObjectID = $AADAdminLogin.objectid
         "AADAdminObjectID" =  "$AADAdminObjectID"
     
         }
-
+.
 
 #Deploy
 
