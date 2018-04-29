@@ -1,5 +1,5 @@
 param(
-$azacountid,
+$azaccountid,
 $azaccesstoken,
 $azTenId,
 $pass,
