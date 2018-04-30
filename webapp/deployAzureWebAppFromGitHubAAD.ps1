@@ -32,10 +32,10 @@ $aztenid
     #}
 
 # Replace the following URL with a public GitHub repo URL
-
+write-host $env:DOWNLOADSECUREFILE.securefile.secureFilePath	
 Write-host  $env:DOWNLOADSECUREFILE.SECUREFILEPATH
 Write-host "certutil -user -p $certpass -importPFX $cert"
-$cert = "$env:DOWNLOADSECUREFILE_SECUREFILEPATH" + '\' + "$certname"
+$cert = "$($env:DOWNLOADSECUREFILE.SECUREFILEPATH)" + '\' + "$certname"
 write-host $cert
 certutil -user -p $certpass -importPFX $cert
 
