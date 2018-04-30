@@ -32,10 +32,8 @@ $aztenid
     #}
 
 # Replace the following URL with a public GitHub repo URL
-dir "../../../../../opt/vsts/work/_temp/"
-write-host  $env:securefile.secureFilePath
-write-host (((gci env:*) | Where-Object { $_.Value -like "*Example.secret*" }).Value)
-Write-host  $env:DOWNLOADSECUREFILE_SECUREFILEPATH
+
+Write-host  $env:DOWNLOADSECUREFILE.SECUREFILEPATH
 Write-host "certutil -user -p $certpass -importPFX $cert"
 $cert = "$env:DOWNLOADSECUREFILE_SECUREFILEPATH" + '\' + "$certname"
 write-host $cert
