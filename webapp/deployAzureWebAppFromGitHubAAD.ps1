@@ -5,8 +5,8 @@ $aduser,
 $appid,
 $certname,
 $certpass,
-$certthumb
-
+$certthumb,
+$aztenid
 )
 
 #Install-packageprovider -name nuget -force -scope CurrentUser
@@ -34,8 +34,6 @@ $certthumb
 # Replace the following URL with a public GitHub repo URL
 
 Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid
-
-
 
 $cert = "${$env:DOWNLOADSECUREFILE_SECUREFILEPATH}" + "$certname"
 certutil -p $certpass -importPFX $cert
