@@ -39,7 +39,7 @@ Write-host "certutil -user -p $certpass -importPFX $cert"
 certutil -user -p $certpass -importPFX $cert
 Write-Output "Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid
 "
-Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid
+Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid -Verbose
 
 $json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebAppAAD.json"
 
@@ -56,7 +56,7 @@ $sqlserverAdminLogin = "sqladmin"
 $sqlservername = "josedbserv$(Get-Random)"
 
 
-$AADAdminLogin  = Get-AzureRmADUser -SearchString "$aduser"
+$AADAdminLogin  = Get-AzureRmADUser -SearchString "$aduser" -Verbose
 Write-Output $aadminlogin
 #$AADAdminLogin = Get-AzureADUser -SearchString $aduser
 $AADAdminObjectID = $AADAdminLogin.id
