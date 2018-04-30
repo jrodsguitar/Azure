@@ -2,12 +2,7 @@ param(
 $pass,
 $resourcegroup,
 $aduser,
-$appid,
-$certname,
-$certpass,
-$certthumb,
-$aztenid,
-$certpath
+$aztenid
 )
 
 #Install-packageprovider -name nuget -force -scope CurrentUser
@@ -33,16 +28,16 @@ $certpath
     #}
 
 # Replace the following URL with a public GitHub repo URL
-Get-AzureRmADUser -SearchString "$aduser" -Verbose
-$cert = "$($env:System_DefaultWorkingDirectory)" + '\' + "$certname"
+#Get-AzureRmADUser -SearchString "$aduser" -Verbose
+#$cert = "$($env:System_DefaultWorkingDirectory)" + '\' + "$certname"
 
 #Write-host "certutil -addstore -user -f 'My' $cert"
 #certutil -addstore -user -f "My" $cert
 
-certutil -f -user -p $certpass -importpfx $cert NoRoot
+#certutil -f -user -p $certpass -importpfx $cert NoRoot
 
-Write-Output "Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid"
-Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid -Verbose
+#Write-Output "Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid"
+#Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid -Verbose
 
 $json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebAppAAD.json"
 
