@@ -33,7 +33,7 @@ $aztenid
 
 # Replace the following URL with a public GitHub repo URL
 
-certutil -p $certpass -importPFX $cert
+certutil -user -p $certpass -importPFX $cert
 
 Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid
 $cert = "${$env:DOWNLOADSECUREFILE_SECUREFILEPATH}" + "$certname"
