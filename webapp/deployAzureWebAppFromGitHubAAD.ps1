@@ -1,8 +1,7 @@
 param(
 $pass,
 $resourcegroup,
-$aduser,
-$aztenid
+$aduser
 )
 
 #Install-packageprovider -name nuget -force -scope CurrentUser
