@@ -5,9 +5,9 @@ $aduser
 
 )
 
-Install-packageprovider -name nuget -force -scope CurrentUser
+#Install-packageprovider -name nuget -force -scope CurrentUser
 
-install-module -name AzureAD -force -verbose -Scope CurrentUser
+#install-module -name AzureAD -force -verbose -Scope CurrentUser
 
 #$secure = Import-Csv C:\me\github\secure\secure.csv
 
@@ -44,8 +44,9 @@ $sqlserverAdminLogin = "sqladmin"
 $sqlservername = "josedbserv$(Get-Random)"
 
 
-$AADAdminLogin = Get-AzureADUser -SearchString $aduser
-$AADAdminObjectID = $AADAdminLogin.objectid
+$AADAdminLogin  = Get-AzureRmADUser -SearchString "$aduser"
+#$AADAdminLogin = Get-AzureADUser -SearchString $aduser
+$AADAdminObjectID = $AADAdminLogin.id
 
 
         $params =  @{
