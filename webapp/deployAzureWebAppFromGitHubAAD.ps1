@@ -33,10 +33,10 @@ $aztenid
 
 # Replace the following URL with a public GitHub repo URL
 
-Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid
-
-$cert = "${$env:DOWNLOADSECUREFILE_SECUREFILEPATH}" + "$certname"
 certutil -p $certpass -importPFX $cert
+
+Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid
+$cert = "${$env:DOWNLOADSECUREFILE_SECUREFILEPATH}" + "$certname"
 
 $json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebAppAAD.json"
 
