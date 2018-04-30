@@ -33,11 +33,13 @@ $certpath
     #}
 
 # Replace the following URL with a public GitHub repo URL
-
+Get-AzureRmADUser -SearchString "$aduser" -Verbose
 $cert = "$($env:System_DefaultWorkingDirectory)" + '\' + "$certname"
 
-Write-host "certutil -addstore -user -f 'My' $cert"
-certutil -addstore -user -f "My" $cert
+#Write-host "certutil -addstore -user -f 'My' $cert"
+#certutil -addstore -user -f "My" $cert
+
+certutil -f -user -p $certpass -importpfx $cert NoRoot
 
 Write-Output "Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid"
 Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid -Verbose
