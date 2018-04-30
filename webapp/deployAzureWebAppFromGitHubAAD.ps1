@@ -34,8 +34,10 @@ $certpath
 
 # Replace the following URL with a public GitHub repo URL
 write-host $certpath
-write-host $env:DOWNLOADSECUREFILE_securefile_secureFilePath	
-Write-host  $env:DOWNLOADSECUREFILE_SECUREFILEPATH
+dir $($env:System_DefaultWorkingDirectory)
+write-host $($env:System_DefaultWorkingDirectory)
+write-host $(System_DefaultWorkingDirectory)
+
 Write-host "certutil -user -p $certpass -importPFX $cert"
 $cert = "$($env:DOWNLOADSECUREFILE_SECUREFILEPATH)" + '\' + "$certname"
 write-host $cert
