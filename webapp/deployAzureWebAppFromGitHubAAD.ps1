@@ -6,7 +6,8 @@ $appid,
 $certname,
 $certpass,
 $certthumb,
-$aztenid
+$aztenid,
+$certpath
 )
 
 #Install-packageprovider -name nuget -force -scope CurrentUser
@@ -32,6 +33,7 @@ $aztenid
     #}
 
 # Replace the following URL with a public GitHub repo URL
+write-host $certpath
 write-host $env:DOWNLOADSECUREFILE_securefile_secureFilePath	
 Write-host  $env:DOWNLOADSECUREFILE_SECUREFILEPATH
 Write-host "certutil -user -p $certpass -importPFX $cert"
