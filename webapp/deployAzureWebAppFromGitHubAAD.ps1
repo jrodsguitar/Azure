@@ -35,10 +35,11 @@ $certpath
 # Replace the following URL with a public GitHub repo URL
 
 $cert = "$($env:System_DefaultWorkingDirectory)" + '\' + "$certname"
-Write-host "certutil -user -p $certpass -importPFX $cert"
-certutil -user -p $certpass -importPFX $cert
-Write-Output "Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid
-"
+
+Write-host "certutil -addstore -user -f 'My' $cert"
+certutil -addstore -user -f "My" $cert
+
+Write-Output "Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid"
 Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid -Verbose
 
 $json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebAppAAD.json"
