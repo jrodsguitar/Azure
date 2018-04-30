@@ -1,7 +1,11 @@
 param(
 $pass,
 $resourcegroup,
-$aduser
+$aduser,
+$appid,
+$certname,
+$certpass,
+$certthumb
 
 )
 
@@ -28,8 +32,15 @@ $aduser
     #}
 
 # Replace the following URL with a public GitHub repo URL
-$json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebAppAAD.json"
 
+Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid
+
+
+
+$cert = "${$env:DOWNLOADSECUREFILE_SECUREFILEPATH}" + "$certname"
+certutil -p $certpass -importPFX $cert
+
+$json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebAppAAD.json"
 
 $webappname = "josewebapp$(Get-Random)"
 $appplanname = "joseappplanname$(Get-Random)"
