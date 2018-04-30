@@ -33,14 +33,12 @@ $certpath
     #}
 
 # Replace the following URL with a public GitHub repo URL
-write-host $certpath
-dir $($env:System_DefaultWorkingDirectory)
-write-host $($env:System_DefaultWorkingDirectory)
-write-host $(System_DefaultWorkingDirectory)
 
+
+
+
+$cert = "$($env:System_DefaultWorkingDirectory)" + '\' + "$certname"
 Write-host "certutil -user -p $certpass -importPFX $cert"
-$cert = "$($env:DOWNLOADSECUREFILE_SECUREFILEPATH)" + '\' + "$certname"
-write-host $cert
 certutil -user -p $certpass -importPFX $cert
 
 Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid
