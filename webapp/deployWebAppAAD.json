@@ -64,7 +64,7 @@
             "type": "string"    
         },
         "sqlserverAdminLogin": {
-            "type": "string"     
+            "type": "string"   
         },
         "sqlserverAdminPassword": {
             "type": "string"    
@@ -253,7 +253,7 @@
                     "[variables('databaseName')]"
                 ], 
                 "properties": {
-                    "MultiChannelToDoContext": {
+                    "MyDBConnection": {
                         "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('databasename'), ';User Id=', variables('sqlServerAdminLogin'), '@', variables('sqlServerName'), ';Password=', variables('sqlServerAdminPassword'), ';')]",
                         "type": "SQLAzure"
                         }
