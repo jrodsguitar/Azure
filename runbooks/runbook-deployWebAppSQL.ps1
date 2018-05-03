@@ -1,57 +1,39 @@
 param(
+
+
+$namePrefix,
+
+
 $pass,
-$resourcegroup,
-$aduser
+
+$resourcegroup = 'NAME_OF_RESOURCE_GROUP',
+
+$aduser = 'ADUSER_WHO_YOU_WANT_TO_MANAGE_DB'
 )
-
-#Install-packageprovider -name nuget -force -scope CurrentUser
-
-#install-module -name AzureAD -force -verbose -Scope CurrentUser
-
-#$secure = Import-Csv C:\me\github\secure\secure.csv
-
-<# if($azcred -eq $null){
-    $azcred = Get-Credential
-    }
-
-    $subscrname   = $secure.subscrname
-    $resourcegroup = $secure.resourcegroup
+$namePrefix = $namePrefix.ToLower()
+$pass = $pass.ToLower()
+# Authenticate to Azure if running from Azure Automation
+$ServicePrincipalConnection = Get-AutomationConnection -Name "AzureRunAsConnection"
+Login-AzureRmAccount `
+    -ServicePrincipal `
+    -TenantId $ServicePrincipalConnection.TenantId `
+    -ApplicationId $ServicePrincipalConnection.ApplicationId `
+    -CertificateThumbprint $ServicePrincipalConnection.CertificateThumbprint | Write-Verbose
     
-    if($azacct -eq $null){
-    $azacct = Login-AzureRmAccount -Subscription $subscrname
-    }
- #>
-   # if($azad -eq $null){
-    #$azad = Connect-AzureAD -AccountId $azaccountid -AadAccessToken $azaccesstoken -TenantId $azTenId
-
-    #}
-
-# Replace the following URL with a public GitHub repo URL
-#Get-AzureRmADUser -SearchString "$aduser" -Verbose
-#$cert = "$($env:System_DefaultWorkingDirectory)" + '\' + "$certname"
-
-#Write-host "certutil -addstore -user -f 'My' $cert"
-#certutil -addstore -user -f "My" $cert
-
-#certutil -f -user -p $certpass -importpfx $cert NoRoot
-
-#Write-Output "Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid"
-#Login-AzureRmAccount -ApplicationId $appid -CertificateThumbprint $certthumb -ServicePrincipal -TenantId $aztenid -Verbose
-
 $json="https://raw.githubusercontent.com/jrodsguitar/Azure/master/webapp/deployWebAppAAD.json"
 
-$random = $(get-random)
-$webappname = "josewebapp$($random)"
-$appplanname = "joseappplanname$($random)"
+$random = $(Get-Random)
+$webappname = "$($namePrefix)webapp$($random)"
+$appplanname = "$($namePrefix)appplanname$($random)"
 $repourl = "https://github.com/jrodsguitar/dotnetcore-sqldb-tutorial-aadauth.git"
 $branch = "master"
 
-$dbname ="josedb$($random)"
+$dbname ="$($namePrefix)db$($random)"
 $sqlserverAdminLogin = "sqladmin"
 
 #$password = Read-Host -assecurestring "Set DB password. Enter a password."
 #$sqlserverAdminPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
-$sqlservername = "josedbserv$($random)"
+$sqlservername = "$($namePrefix)dbserv$($random)"
 
 
 $AADAdminLogin  = Get-AzureRmADUser -SearchString "$aduser" -Verbose
