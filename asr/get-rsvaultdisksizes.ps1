@@ -3,7 +3,8 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$resourceGroupName,
 
-    [Parameter(Mandatory = $true)][string]$VaultName
+    [Parameter(Mandatory = $true)]
+    [string]$VaultName
 
 )
 
@@ -30,12 +31,10 @@ if ($PSBoundParameters.Keys -ne $null) {
     #loop through each protected item and record the disk size in an array
     foreach ($protecteditem in $protecteditems) {
     
-        #You may want to add another loop that iterates over each disk of the vm here if it applies to you
-    
+        #You may want to add another loop that iterates over each disk of the vm here if it applies to you  
         $protecteditemsobject = @{
     
-            disksize = $protecteditem.Properties.providerSpecificDetails.protectedManagedDisks.diskcapacityinbytes
-    
+            disksize = $protecteditem.Properties.providerSpecificDetails.protectedManagedDisks.diskcapacityinbytes  
             vmname   = $protecteditem.Properties.friendlyname
         }
     
