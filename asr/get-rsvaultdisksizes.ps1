@@ -1,6 +1,9 @@
  param(
 
+ [Parameter(Mandatory=$true)]
  [string]$resourceGroupName,
+
+ [Parameter(Mandatory=$true)]
  [string]$VaultName
 
  )
