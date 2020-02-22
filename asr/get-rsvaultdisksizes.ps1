@@ -5,6 +5,7 @@
 
  )
 
+#get-rsvaultdisksizes.ps1 -resourceGroupName "nameofResourceGroup" -VaultName "nameOfVault"
 #Jose Rodriguez - 2/22/2020
 #Run this at your own damn risk
 #Know what it does before blindly running it. I am NOT responsible for your failure to read the above warning, nor any utter destruction this may cause due to your negligence.
@@ -51,6 +52,9 @@ else {
     Write-Output `
     "`t" `
     "You need to pass the resourceGroupName and vaultname dude" `
+    "`t" `
+    "EXAMPLE:" `
+    "get-rsvaultdisksizes.ps1 -resourceGroupName 'nameofResourceGroup' -VaultName 'nameOfVault'" `
     "`t" `
     "WARNING!!!!!!!!!!!!!!!!" `
     "`t" `
