@@ -17,7 +17,7 @@ if ($PSBoundParameters.Keys -ne $null) {
 
     #get protected items. In this case we are assuming it's a managed disk and each Vm ONLY has 1 Managed disk. Obviously you will need to customize this based on your needs
     try {
-        $protecteditems = (Get-AzureRmResource -ResourceGroupName $resourceGroupName -ResourceType Microsoft.RecoveryServices/vaults/replicationProtectedItems -ResourceName $VaultName -ApiVersion 2016-08-10)
+        $protecteditems = (Get-AzResource -ResourceGroupName $resourceGroupName -ResourceType Microsoft.RecoveryServices/vaults/replicationProtectedItems -ResourceName $VaultName -ApiVersion 2016-08-10)
     }
     
     catch {
