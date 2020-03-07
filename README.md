@@ -1,3 +1,1 @@
-# Azure
-#Test
-#test2
+## Various Azure related scripts and code. 
