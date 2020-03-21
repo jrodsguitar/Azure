@@ -1,4 +1,4 @@
-$users = Get-ADUser -Filter { SamAccountName -like '' } -Properties *
+$users = Get-ADUser -Filter * -Properties *
 
 $results = @()
 
