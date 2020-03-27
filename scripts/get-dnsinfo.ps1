@@ -1,6 +1,5 @@
 
 #Get Dns information from NIC. Input is a list of computer names. This uses WMIC to gather the info.
-#
 $computers = Get-Content c:\computername.txt
 
 $finallist = @()
